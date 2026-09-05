@@ -1,87 +1,84 @@
-# Verifier architecture
+# Verifier 架构
 
-## Design target
+## 设计目标
 
-The verifier must distinguish a plausible file from a completed financial task. It should evaluate the final observable state and preserve diagnostic evidence.
+Verifier 必须区分“看起来合理的文件”和“真正完成的金融任务”。它评估可观察的最终状态，并保留可诊断证据。
 
 ```text
-submission + final environment state + initial snapshot
-        + policy + hidden truth + upstream versions
+提交物 + 最终环境状态 + 初始快照
+        + 政策 + 私有真值 + 上游版本
                               ↓
-                         preflight gates
+                         预检门
                               ↓
-                   normalization and checker set
+                    归一化与检查器集合
                               ↓
-                  weighted base score + hard caps
+                    加权基础分 + 硬性封顶
                               ↓
-       reward.json + scoring_detail.json + canonical summary hash
+       reward.json + scoring_detail.json + 统一摘要哈希
 ```
 
-## Layers to preserve during refactor
+## 重构时保留的层次
 
-| Layer | Responsibility | Refactor decision |
+| 层次 | 职责 | 重构决策 |
 | --- | --- | --- |
-| Contracts | typed submission, ground truth, policy, initial snapshot, checks, reward | keep concept; review public/private boundaries |
-| Core | normalization, preflight, hack detection, score aggregation, canonical outputs | keep concept; remove unsafe defaults and document interfaces |
-| Checkers | reusable field truth, equations, completeness, metadata, provenance, state checks | retain after test-driven cleanup |
-| Task base | task checker table, caps, red lines, pass threshold | retain; make immutable registry configuration explicit |
-| Registry | task discovery, CLI, required deliverables | rewrite to separate the 20 standard tasks from case adapters |
-| Task modules | task-specific rule graph, weights, caps, policy requirements | migrate one task at a time; remove embedded fixture truth |
-| Fixtures/tests | golden, initial, adversarial mutations, synthetic raw inputs | move out of production modules into explicit test/development packages |
-| Case adapters | high-fidelity source-layout parsing and instance policy | rebuild with configuration and synthetic or deliberately released inputs |
+| 数据合同 | 提交物、私有真值、检查结果与评分结果 | 保留 typed interface；审阅公开/私有边界 |
+| 核心 | 归一化、预检、防篡改、聚合评分 | 保留思想；移除不安全默认值并写清接口 |
+| 通用检查器 | 字段真值、公式、完整性、元数据、来源、状态 | 通过测试后逐项沉淀 |
+| 任务规则 | 某任务专属的规则图、权重、封顶与阈值 | 逐任务迁移；禁止嵌入实例答案 |
+| 注册表 | 任务发现、CLI、必交产物 | 将 20 个标准任务与案例适配器分开 |
+| 测试与样例 | golden、initial、对抗扰动、合成输入 | 从生产代码移入显式测试/开发实例包 |
+| 案例适配器 | 高保真源布局解析与实例政策 | 使用配置与合成/明确发布输入重新构建 |
 
-## Checker categories
+## 五类检查器
 
-### 1. Preflight
+### 1. 预检
 
-Checks task/version, policy applicability, upstream manifests, input integrity, entity/period/scope, unit readability, and environment adapter availability. Infrastructure failure must be visible as infrastructure failure, not silently counted as model failure.
+检查任务/版本、政策适用性、上游 manifest、输入完整性、主体/期间/口径、单位可读性和环境适配器可用性。基础设施异常必须显示为基础设施异常，不能默默算作模型失败。
 
-### 2. External truth
+### 2. 外部真值
 
-Compares submitted fields with hidden or independently recomputed expected values. Critical concepts are scored separately from noncritical fields.
+将 Agent 提交字段与私有或独立重算的正确值比对。关键概念与普通字段分开计分。
 
-### 3. Internal consistency
+### 3. 内部一致性
 
-Recomputes equations from the submission itself: statement balance, subtotal, rollforward, tax formula, capital ratio, or other task-specific relationships. This catches inconsistencies but never replaces truth comparison: two wrong fields can still balance.
+从提交内容本身复算公式：报表平衡、小计、滚动、税额、资本指标或其他任务关系。它能发现自相矛盾，但不能取代真值比较——两个错误数字也可能刚好平衡。
 
-### 4. Provenance and deliverables
+### 4. 来源与交付物
 
-Requires the declared output files, concept-to-field mapping, source pointers, and actual submitted state. “The document says submitted” is not proof that the backend state is submitted.
+检查规定输出文件、概念到字段映射、来源指针和真实提交状态。文档里写“已提交”不能证明后端状态确实已提交。
 
-### 5. Security and anti-hack gates
+### 5. 安全与防作弊门
 
-Protected-input mutation, hidden-truth access, backend tampering, scope escape, or PII injection are hard failures. A correct-looking result obtained through a prohibited path is not a successful task.
+修改受保护输入、访问 hidden truth、篡改后端、越权访问或注入个人信息都属于硬失败。即使结果数字看上去正确，违规路径也不能算任务成功。
 
-## Score semantics
+## 评分语义
 
-The score must expose both a diagnostic base score and the reportable score after caps:
+评分同时给出诊断基础分和经过封顶的可报告分：
 
 ```text
-base score = sum(PASS checker weights)
-reportable score = apply_caps(base score, triggered gates)
+基础分 = 所有 PASS 检查器的权重之和
+可报告分 = 对基础分依次应用已触发的封顶规则
 ```
 
-Typical caps include wrong entity/scope, wrong unit, missing critical fields, failed red-line equation, no structured state, and no actual submission. A pass requires the threshold *and* required critical gates.
+常见封顶包括：错主体/口径、错单位、遗漏关键字段、红线公式失败、没有结构化状态、没有真实提交。通过必须同时满足分数阈值与必要检查器。
 
-## Why fixtures must leave task modules
+## 为什么 fixture 必须离开生产任务模块
 
-The legacy engine stores `GOLDEN_FIELDS` and, in some cases, policy/data fixtures directly in task modules. This is useful for self-tests, but it creates two problems in a public benchmark:
+旧引擎把 `GOLDEN_FIELDS` 等答案式数据直接放进任务模块，这对快速自测有帮助，但不适合作为公开 Benchmark：
 
-1. production verifier imports contain answer-like data and can make the release boundary ambiguous;
-2. instance generation can fall back to fabricating input from golden fields, reversing the correct direction of task construction.
+1. 生产 Verifier 的 import 中携带近似答案，公开/私有边界不清；
+2. 实例生成可能从 golden 字段反向伪造输入，颠倒了正确的任务构造方向。
 
-The refactor must use this structure instead:
+公开重构采用以下结构：
 
 ```text
 verifier/
-  finbench/
-    core/              # no task answers
-    tasks/             # task rules; no instance values
-  tests/
-    fixtures/          # synthetic golden/initial/adversarial data
-  dev_instances/       # explicit public development instances
+  src/finbench/          # 通用核心与任务规则，不含实例答案
+  tests/                 # 合成 golden / initial / 对抗数据
+tasks/                   # 公开任务合同与检查器说明
+private/holdout/         # 不进入公开仓库的实例与答案
 ```
 
-## Evidence labels for current code
+## 当前证据边界
 
-The current engine has passed a local C3/C4 self-test for 21 registered modules: golden fixture scores `1.0`, initial fixture scores `0.0`. Five representative task families have adversarial probes. These are meaningful engineering signals, but they are not yet Agent leaderboard results or proof that all GUI/task environments are runnable end to end.
+公开核心已用 10 个合成测试验证三个重构模块。旧引擎曾对 21 个注册模块完成本地 golden/initial 自测，并对五类代表任务运行过对抗探针；这些都是工程信号，不是 Agent 排行榜，也不是所有 GUI 环境已经端到端可运行的证明。

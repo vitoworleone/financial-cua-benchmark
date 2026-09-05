@@ -1,15 +1,15 @@
-# Bond-underwriting track
+# 债券承做赛道
 
-This track organizes a document-heavy financial workflow extension: financial extraction, workpaper completeness, cross-document consistency, feedback-response preparation, ABS asset checks, and market-analysis support.
+本赛道面向文档密集型金融工作流，覆盖财务提取、底稿完整性、跨文件一致性、反馈回复准备、ABS 资产核验和市场分析支持。
 
-Its key contribution is not simply adding domain documents. It changes the evaluation problem from structured form filling to multi-file evidence-chain work:
+它的重点不是简单增加一批行业文档，而是把评测对象从“填一个结构化表单”扩展到多文件证据链工作：
 
 ```text
-documents and workpapers
-→ evidence extraction / matching
-→ discrepancy and missing-material detection
-→ draft or checklist generation
-→ explicit human-review points
+文件与底稿
+→ 证据提取 / 匹配
+→ 差异与缺失材料识别
+→ 初稿或核对清单生成
+→ 明确人工复核点
 ```
 
-The six task designs are recorded in the central [task catalog](../../docs/02-task-catalog.md). They will be promoted into full task packages only after their final state, synthetic development input, deterministic checker coverage, and expert-review boundary are specified.
+6 个设计见中央[任务总表](../../docs/02-task-catalog.md)。只有在确定最终状态、合成开发输入、确定性 checker 覆盖和专家复核边界后，它们才会升级为完整任务包。

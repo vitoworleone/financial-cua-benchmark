@@ -1,37 +1,37 @@
-# 现金流量表填报 / Cash-flow filing
+# 现金流量表填报
 
 ```yaml
 task_id: fin_d2_cash_flow
 task_version: 0.2.0-public-refactor
 track: financial_accounting
 difficulty: D2
-status: verifier_refactored_synthetic_tests_only
-environment_status: adapter_contract_only
+status: 已重构验证器，仅含合成测试
+environment_status: 仅定义环境适配器合同
 ```
 
-## Purpose
+## 任务目的
 
-The Agent completes a normalized cash-flow reporting form from supplied canonical amounts. It must preserve metadata and units, produce a submitted state, and maintain the primary cash bridges. The current public refactor focuses on directly observable, deterministic invariants; it does not yet claim a full direct-method/indirect-method browser task release.
+Agent 根据 canonical 金额完成现金流量表填报，保持元数据与单位正确，产出正式提交状态，并满足核心现金滚动关系。当前公开重构聚焦可观察、可确定性验证的不变量；它不宣称已完成完整的直接法/间接法浏览器任务发布。
 
-## Public task contract
+## Agent 可见任务合同
 
-The instance provides a de-identified entity, reporting period, scope, unit, canonical input, target-field guide, required output artifacts and read-only input hashes. The Agent must:
+实例提供脱敏主体、报告期、口径、单位、canonical 输入、目标字段说明、必交产物和只读输入哈希。Agent 必须：
 
-1. select the specified entity, period, scope and unit;
-2. file the operating, investing, financing, net-change, opening-cash and closing-cash fields;
-3. preserve source mapping for every expected field;
-4. submit through the approved environment; and
-5. avoid altering input materials or using evaluator-only state.
+1. 选择指定主体、期间、口径和单位；
+2. 填列经营、投资、筹资、现金净变动、期初现金和期末现金；
+3. 为每个预期字段保留来源映射；
+4. 通过规定环境提交；
+5. 不得修改输入或读取评测器私有状态。
 
-## Business invariants
+## 业务不变量
 
 ```text
-net change in cash = operating + investing + financing cash flow
-closing cash = opening cash + net change in cash
+现金及现金等价物净增加额 = 经营活动现金流 + 投资活动现金流 + 筹资活动现金流
+期末现金 = 期初现金 + 现金及现金等价物净增加额
 ```
 
-All arithmetic is performed after canonical unit normalization. In a later full task package, any exchange-rate effect and direct/indirect-method bridge will be explicit fields rather than silently absorbed into these equations.
+所有公式在统一单位后计算。后续完整任务会把汇率影响和直接/间接法桥接设为明确字段，不能默默塞进上述关系中。
 
-## Evaluation boundary
+## 实现边界
 
-The clean verifier validates final state, not a prescribed click sequence. It checks input integrity, metadata, unit, artifacts, field truth, both cash bridges, provenance and submission. Tests are synthetic; no claim is made yet about a released hidden set, an end-to-end CUA environment, or model performance. See [verifier contract](verifier.md).
+公开 Verifier 检查最终状态，不强制点击轨迹：输入完整性、元数据、单位、产物、字段真值、两条现金桥、来源与提交状态均在范围内。测试为合成测试；尚未发布 hidden set、端到端 CUA 环境或模型成绩。

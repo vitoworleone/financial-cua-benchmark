@@ -1,53 +1,55 @@
-# Task catalog
+# 任务总表
 
-## Catalog convention
+## 统计口径
 
-The financial-accounting suite contains **20 standard benchmark tasks**. A separate finance-lease case module exists for an instance-specific schedule verification scenario; it is not counted as a twenty-first general task.
+财务会计赛道包含 **20 个标准 Benchmark 任务**。另有一个融资租赁摊还表案例适配器，它服务于实例化 schedule 复核，不计入第 21 个通用任务。
 
-The bond-underwriting track currently contains six task designs. They are part of the public design catalog, not yet claims of completed runnable verifier implementations.
+债券承做赛道现有 6 个任务设计；它们已进入公开设计目录，但尚不代表 Verifier 或运行环境已经完成。
 
-## Track A — Financial accounting: 20 standard tasks
+机器可读状态见 [`tasks/catalog.yaml`](../tasks/catalog.yaml)。
 
-| ID | Difficulty | Task | Core capability |
+## 赛道 A：财务会计 20 个标准任务
+
+| ID | 难度 | 任务 | 核心能力 |
 | --- | --- | --- | --- |
-| `fin_d1_balance_sheet` | D1 | Balance-sheet filing | concept mapping, units, periods, statement balance, submission state |
-| `fin_d1_income_statement` | D1 | Income-statement filing | staged profit construction, precision, current/comparative periods |
-| `fin_d2_cash_flow` | D2 | Cash-flow statement | direct/indirect method, rollforward, cross-statement checks |
-| `fin_d2_three_statements` | D2 | Three-statement package | multi-deliverable dependency and cross-statement consistency |
-| `fin_d2_equity_changes` | D2 | Statement of changes in equity | column rollforward, OCI, parent/NCI treatment |
-| `fin_d2_bank_reconciliation` | D2 | Bank reconciliation | book/bank items, unreconciled differences, balanced final state |
-| `fin_d2_iit_settlement` | D2 | Individual income-tax settlement | multi-source aggregation and policy-bounded recomputation |
-| `fin_d2_stamp_duty_surcharges` | D2 | Stamp duty and surcharge filing | tax base, policy applicability, filing outputs |
-| `fin_d3_ar_aging_ecl` | D3 | AR aging and ECL | aging buckets, collective ECL, traceability |
-| `fin_d3_bank_provision` | D3 | Bank provisions and capital adequacy | NPL composition, provisions, RWA, capital ratios |
-| `fin_d3_cit_annual` | D3 | Annual corporate income-tax filing | accounting-to-tax adjustments, losses, incentives |
-| `fin_d3_finance_lease` | D3 | Finance-lease amortized cost | effective-interest method and period rollforward |
-| `fin_d3_fund_nav` | D3 | Fund NAV calculation | position valuation, accruals, NAV per unit |
-| `fin_d3_insurance` | D3 | Insurance and solvency reporting | reserves, regulatory ratios, rollforward |
-| `fin_d3_lvat_liquidation` | D3 | Land appreciation tax liquidation | project aggregation and progressive bracket logic |
-| `fin_d3_related_party` | D3 | Related-party and consolidation adjustments | relationship graph, transactions, elimination |
-| `fin_d3_securities` | D3 | Securities business and holding valuation | position fair value, fund separation, stale-price detection |
-| `fin_d3_vat_filing` | D3 | VAT and surcharge filing | invoices, output/input VAT, carryover |
-| `fin_d4_consolidation_selfcheck` | D4 | Consolidation self-check and repair | eliminations, NCI, goodwill, injected-anomaly resolution |
-| `fin_d4_financial_instruments` | D4 | Financial-instrument classification and measurement | business model, SPPI, amortized cost vs. fair value |
+| `fin_d1_balance_sheet` | D1 | 资产负债表填报 | 概念映射、单位、期间、表内平衡、提交状态 |
+| `fin_d1_income_statement` | D1 | 分步式利润表填报 | 分层利润构建、精度、当前/比较期间 |
+| `fin_d2_cash_flow` | D2 | 现金流量表填报 | 直接/间接法、滚动、跨表核对 |
+| `fin_d2_three_statements` | D2 | 三大报表勾稽 | 多交付物依赖与跨表一致性 |
+| `fin_d2_equity_changes` | D2 | 所有者权益变动表 | 列滚动、OCI、母公司/少数股东处理 |
+| `fin_d2_bank_reconciliation` | D2 | 银行存款余额调节 | 账面/银行项目、未达项与最终平衡 |
+| `fin_d2_iit_settlement` | D2 | 个人所得税汇算清缴 | 多源汇总与政策约束重算 |
+| `fin_d2_stamp_duty_surcharges` | D2 | 印花税及附加税费申报 | 税基、政策适用性、申报产物 |
+| `fin_d3_ar_aging_ecl` | D3 | 应收账款账龄与 ECL | 账龄分桶、组合 ECL、可追溯性 |
+| `fin_d3_bank_provision` | D3 | 银行减值准备与资本充足率 | 不良构成、拨备、RWA、资本指标 |
+| `fin_d3_cit_annual` | D3 | 企业所得税汇算清缴 | 会计税务差异、亏损与优惠 |
+| `fin_d3_finance_lease` | D3 | 融资租赁会计处理 | 实际利率法与期间滚动 |
+| `fin_d3_fund_nav` | D3 | 基金净值估值 | 持仓估值、应计、单位净值 |
+| `fin_d3_insurance` | D3 | 保险合同与偿付能力 | 准备金、监管指标、滚动 |
+| `fin_d3_lvat_liquidation` | D3 | 土地增值税清算 | 项目汇总与超率累进 |
+| `fin_d3_related_party` | D3 | 关联方与合并调整 | 关系图谱、交易、抵销 |
+| `fin_d3_securities` | D3 | 证券自营与持仓估值 | 公允价值、资管隔离、陈旧价格识别 |
+| `fin_d3_vat_filing` | D3 | 增值税纳税申报 | 发票、销项/进项、留抵 |
+| `fin_d4_consolidation_selfcheck` | D4 | 合并报表自查 | 抵销、少数股东权益、商誉、异常修复 |
+| `fin_d4_financial_instruments` | D4 | 金融工具分类与计量 | 业务模式、SPPI、摊余成本与公允价值 |
 
-## Case-based verification module
+## 独立案例适配器
 
-| ID | Role | Current treatment |
+| ID | 定位 | 当前处理方式 |
 | --- | --- | --- |
-| `fin_d3_finance_lease_hengyang_guansheng` | Instance-specific ACT/360 lease-schedule verifier | Refactor into a generic, configurable finance-lease case adapter; remove embedded local path and case identifiers before migration |
+| `fin_d3_finance_lease_schedule` | 配置化 ACT/360 租赁摊还表复核 | 已重构为通用规则适配器，配有虚构合成测试；不包含真实项目实例 |
 
-## Track B — Bond underwriting workflow designs
+## 赛道 B：债券承做工作流设计
 
-| ID | Task | Primary output | Intended verification model |
+| ID | 任务 | 主要输出 | 预期验证方式 |
 | --- | --- | --- | --- |
-| `bond_t1_financial_extraction` | Extract three statements and produce a normalized financial summary | financial summary + source notes | field truth, calculations, source pointers, human accounting review |
-| `bond_t2_workpaper_completeness` | Match received materials to a workpaper index | missing-materials list + review queue | file/metadata match, required coverage, human material-sufficiency review |
-| `bond_t3_cross_document_consistency` | Check financial figures across disclosure draft and workpapers | consistency-issues table | field/period/unit comparison, human disclosure judgment |
-| `bond_t4_feedback_reply` | Prepare a feedback-response draft and disclosure checklist | response draft + checklist | numerical truth, structure, evidence map, constrained text review |
-| `bond_t5_abs_asset_check` | Match ABS assets, contracts, invoices, and cash receipts | asset-check table + exceptions | record linkage, calculation, exception coverage, expert asset review |
-| `bond_t6_market_analysis` | Build underwriting ranking and market-summary materials from export data | ranking table + market narrative | deterministic ranking/formulas, source traceability, human market interpretation |
+| `bond_t1_financial_summary` | 审计报告到财务摘要 | 财务摘要与来源注释 | 字段真值、计算、来源指针、人工会计复核 |
+| `bond_t2_workpaper_completeness` | 工作底稿完整性检查 | 缺失材料清单与复核队列 | 文件/元数据匹配、必需覆盖度、人工充分性判断 |
+| `bond_t3_prospectus_consistency` | 募集说明书与财务摘要一致性核对 | 一致性问题表 | 字段/期间/单位比较、人工披露判断 |
+| `bond_t4_feedback_reply` | 交易所反馈回复底稿 | 回复初稿与披露清单 | 数值真值、结构、证据映射、受约束文本复核 |
+| `bond_t5_abs_asset_reconciliation` | ABS 资产合同、发票与回款勾稽 | 资产核验表与异常项 | 记录关联、计算、异常覆盖、专家复核 |
+| `bond_t6_market_ranking` | 承销市场排名与文字披露 | 排名表与市场描述 | 确定性排序/公式、来源可追溯、人工市场解释 |
 
-## Status rules
+## 状态规则
 
-The catalog describes task intent and does not, by itself, claim every task is ready for model evaluation. A future machine-readable `catalog.yaml` will carry per-task fields for `spec_status`, `verifier_status`, `instance_status`, `test_status`, and `release_tier`.
+任务总表描述的是任务意图，不自动代表所有任务已经可以做模型评测。每项任务的 `spec_status`、`verifier_status`、`instance_status`、`test_status` 和 `release_tier` 以机器可读目录为准。

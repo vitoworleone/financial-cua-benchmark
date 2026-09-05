@@ -1,53 +1,51 @@
-# 企业资产负债表填报 / Balance-sheet filing
+# 企业资产负债表填报
 
 ```yaml
 task_id: fin_d1_balance_sheet
 task_version: 0.2.0-public-refactor
 track: financial_accounting
 difficulty: D1
-status: verifier_refactored_synthetic_tests_only
-environment_status: adapter_contract_only
+status: 已重构验证器，仅含合成测试
+environment_status: 仅定义环境适配器合同
 ```
 
-## Purpose
+## 任务目的
 
-The Agent transfers a canonical balance sheet into a target reporting form, preserves entity, period, reporting scope and unit, then leaves an observable submitted final state. This task evaluates controlled filing work; it does not ask the Agent to derive accounting policy or extract statements from a PDF.
+Agent 将经过验证的 canonical 资产负债表填入目标网报表单，并留下可观察的正式提交状态。本任务评估受控填报能力，不要求 Agent 从 PDF 抽取数字或重新作出会计政策判断。
 
-## Public task contract
+## Agent 可见任务合同
 
-The runtime must provide a de-identified entity, reporting period, `separate` or `consolidated` scope, declared display unit, canonical source values, target-field guide, read-only input manifest, and an output location. The Agent must:
+运行实例应提供脱敏主体、报告期、`separate` 或 `consolidated` 口径、显示单位、canonical 来源数值、目标字段说明、只读输入 manifest 和输出位置。Agent 必须：
 
-1. choose the required entity, period, scope and unit;
-2. populate every applicable target field without replacing undisclosed values with zero;
-3. retain a field-to-source mapping for each submitted field;
-4. save and submit through the approved environment interface; and
-5. record only genuine exceptions in its processing notes.
+1. 选择指定主体、期间、口径和单位；
+2. 填写所有适用字段，不能把未披露值擅自写成零；
+3. 为每个提交字段保留字段到来源的映射；
+4. 通过规定环境保存并提交；
+5. 仅记录真实遇到的异常。
 
-The public contract never exposes golden field values, verifier paths, or a score threshold.
+公开任务合同不提供 golden 数值、Verifier 路径或预期得分。
 
-## Observable deliverables
+## 可观察交付物
 
-| Deliverable | Minimum observable evidence |
+| 交付物 | 最低可观察证据 |
 | --- | --- |
-| Filed form | Final backend-readable field values and `submitted` state |
-| Submission manifest | Concept/field/source-pointer mapping for every applicable field |
-| Processing notes | Actual ambiguity, unit, or environment issue—or an explicit no-exception note |
-| Input integrity | Original source hashes remain unchanged |
+| 已填报表 | 后端可读取的最终字段与 `submitted` 状态 |
+| 提交 manifest | 每个适用字段的概念、环境字段与来源指针映射 |
+| 处理说明 | 真实的歧义、单位或环境异常；无异常需明确说明 |
+| 输入完整性 | 原始来源哈希保持不变 |
 
-## Business invariants
+## 业务不变量
 
-After normalization to yuan, the form must satisfy:
+统一为元后，表内至少满足：
 
 ```text
-total assets = total liabilities + total equity
-total assets = current assets + non-current assets
-total liabilities = current liabilities + non-current liabilities
+资产总计 = 负债总计 + 所有者权益总计
+资产总计 = 流动资产合计 + 非流动资产合计
+负债总计 = 流动负债合计 + 非流动负债合计
 ```
 
-Internal balance is necessary but insufficient: independently wrong fields that happen to balance must still fail truth and provenance checks.
+表内平衡是必要条件，不是充分条件；两个错误字段即使恰好抵消，也必须在字段真值和来源检查中失败。
 
-## Evaluation boundary
+## 实现边界
 
-The refactored Python verifier currently covers metadata, unit recognition, input integrity flags, required artifacts, critical/non-critical field truth, the three equations, provenance, submission state, and transparent caps. See [verifier contract](verifier.md).
-
-Its tests use only synthetic values and a state object; there is no released browser runner, hidden benchmark split, or Agent leaderboard. A future environment adapter must expose the same observable state without changing the task contract.
+当前公开 Python Verifier 检查元数据、单位、输入完整性、必交产物、关键/普通字段真值、三项公式、来源和提交状态。测试只使用合成状态对象；尚未发布浏览器 runner、私有测评集或模型排行榜。

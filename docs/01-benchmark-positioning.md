@@ -1,47 +1,47 @@
-# Benchmark positioning
+# 评测定位与证据边界
 
-## The problem
+## 问题
 
-Many AI evaluations stop at whether a model can produce a plausible answer, a filled-looking document, or a screenshot that appears successful. Financial work requires stronger evidence. A valid output must use the right entity, period, scope, unit, policy version, field mapping, arithmetic relationship, source traceability, and final submission state.
+很多 AI 评测只判断模型是否给出了一个“像答案”的文本、一份看似填完的表格，或一张看似成功的截图。但金融工作需要更强的证据：主体、期间、口径、单位、政策版本、字段映射、算术关系、来源可追溯性和正式提交状态都必须正确。
 
-The benchmark therefore asks a narrower but operational question:
+本项目因此回答一个更窄、但可落地的问题：
 
-> Can an Agent move a controlled financial work environment from a known initial state to a correct, observable, reviewable final state without changing protected inputs or bypassing the intended boundary?
+> Agent 能否在不改动受保护输入、不绕过规定边界的前提下，将一个受控金融工作环境从已知初始状态转移到正确、可观察、可复核的最终状态？
 
-## What this benchmark is and is not
+## 本项目是什么，不是什么
 
-| This benchmark is | This benchmark is not |
+| 是 | 不是 |
 | --- | --- |
-| A task, state, and verifier design for financial CUA / Agent evaluation | An investment, audit, tax, legal, underwriting, or regulatory decision system |
-| A deterministic scoring architecture for checkable financial outputs | A generic LLM-as-judge benchmark for polished narrative text |
-| A way to assess human-in-the-loop preparation work | Evidence that an Agent may issue professional conclusions or submit to real systems |
-| A public methodology plus a controlled release strategy | A repository that publishes every answer, test instance, or golden state |
+| 用于金融 CUA / Agent 评测的任务、状态和 Verifier 设计 | 投资、审计、税务、承销或监管决策系统 |
+| 可检查金融输出的确定性评分架构 | 只由 LLM 判断文案是否流畅的通用 Benchmark |
+| 评估有人参与的准备性工作 | 证明 Agent 可以独立出具专业结论或提交真实系统 |
+| 公开方法论与受控发布策略 | 公开每一个答案、测试实例或黄金状态的仓库 |
 
-## Task-design unit
+## 任务设计单元
 
-Each task must define the same contract before implementation begins:
+在开始实现前，每个任务必须先定义同一份合同：
 
 ```text
-Intent
-→ Agent-visible inputs and constraints
-→ Reproducible initial state
-→ Required observable outputs and state transition
-→ Hidden gold state / independently computed truth
-→ Deterministic verifier and explicit human-review boundary
+任务意图
+→ Agent 可见输入与约束
+→ 可复现初始状态
+→ 必交可观察产物与状态转移
+→ 私有黄金状态 / 独立计算的正确值
+→ 确定性 Verifier 与人工复核边界
 ```
 
-This avoids a common failure mode: task instructions, setup scripts, golden answers, and verifiers are written independently and then silently disagree.
+这避免任务说明、环境初始化、黄金答案和 Verifier 各自编写、最后悄悄互相矛盾的常见问题。
 
-## Evidence levels
+## 证据等级
 
-Every public claim is classified as one of these levels:
+所有公开表述都按下列等级标注：
 
-| Label | Meaning |
+| 标签 | 含义 |
 | --- | --- |
-| `design` | Task, verifier, or protocol has been specified but not run as an end-to-end benchmark |
-| `implemented` | Code exists and can be inspected or unit-tested |
-| `self-tested` | Golden/initial or other controlled self-tests have passed |
-| `adversarially-probed` | Defined error mutations have been executed and checked |
-| `agent-evaluated` | A documented Agent run produced a reportable result |
+| `design` | 已定义任务、Verifier 或协议，但尚未端到端运行 |
+| `implemented` | 代码已实现，可阅读或执行单元测试 |
+| `self-tested` | golden / initial 或其他受控自测已通过 |
+| `adversarially-probed` | 已执行并检查预设错误扰动 |
+| `agent-evaluated` | 有文档化 Agent 运行并产出可报告结果 |
 
-The repository must never promote an asset to a higher level without a corresponding reproducible artifact.
+没有对应的可复现产物，仓库不得把资产升级到更高证据等级。

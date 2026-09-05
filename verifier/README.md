@@ -1,38 +1,36 @@
-# Verifier refactor workspace
+# Verifier 重构工作区
 
-This package is a clean verifier implementation for the public repository. It is an adaptation of the original project's design—not a copy of its legacy modules. In particular, production rule code contains no source-workspace paths, real contract identifiers, or instance-specific golden answers.
+这里存放公开仓库的干净 Verifier 实现。它吸收旧项目的设计思想，但不是旧模块的复制：生产规则不包含源工作区路径、真实合同/项目标识或实例化黄金答案。
 
-## What has been migrated
+## 已重构模块
 
-| Task | What the verifier checks | Test boundary |
+| 任务 | Verifier 检查内容 | 测试边界 |
 | --- | --- | --- |
-| `fin_d1_balance_sheet` | Required fields, entity/period/unit, provenance, artifact state, balance equation, asset and liability subtotals, and score caps | Fully synthetic fixtures |
-| `fin_d2_cash_flow` | Required fields, entity/period/unit, provenance, artifact state, net-cash-change bridge, opening/closing cash bridge, and score caps | Fully synthetic fixtures |
-| `fin_d3_finance_lease_schedule` | Configurable ACT/360 convention, actual days, interest, principal/interest split, period roll-forward, residual, totals, provenance, and submission state | Fully synthetic three-period fixture |
+| `fin_d1_balance_sheet` | 必填字段、主体/期间/单位、来源、产物状态、资产负债权益平衡、资产与负债小计、封顶 | 全部为合成 fixture |
+| `fin_d2_cash_flow` | 必填字段、主体/期间/单位、来源、产物状态、现金净变动桥、期初期末现金桥、封顶 | 全部为合成 fixture |
+| `fin_d3_finance_lease_schedule` | 配置化 ACT/360、实际天数、利息、还本付息拆分、逐期滚动、残值、汇总、来源与提交状态 | 虚构三期合成 fixture |
 
-The two modules intentionally exercise the reusable core before more task families are brought across. They demonstrate the expected migration pattern:
+每个迁移模块都遵循同一模式：
 
-1. define only reusable task rules in `src/finbench/tasks/`;
-2. keep golden values and adversarial states inside tests or an explicit synthetic development fixture;
-3. use a named checker result for each documented condition; and
-4. express business-critical failures through transparent score caps rather than hidden heuristics.
+1. `src/finbench/tasks/` 只放可复用任务规则；
+2. golden 与对抗状态只存在于测试或显式合成开发 fixture；
+3. 文档里的每个成功条件都对应命名 checker；
+4. 业务红线用透明封顶表达，而不是隐藏启发式判断。
 
-## Run the current tests
+## 运行测试
 
-From this directory in PowerShell:
+在仓库根目录执行：
 
 ```powershell
-$env:PYTHONPATH = 'src'
-python -m pytest -q
+python -m pytest
 ```
 
-The current suite contains ten synthetic tests and passes without access to the original workspace.
+当前共有 10 个合成测试，无需访问原始工作区即可通过。
 
-## Remaining refactor work
+## 待完成工作
 
-- add the shared checker library and task-base composition API only after their public contracts are tested;
-- keep the 20 standard tasks distinct from the extra case-based finance-lease adapter;
-- rebuild policy-heavy, institution-specific, and reconciliation tasks using the same fixture boundary;
-- replace the path-bound finance-lease implementation with a configurable adapter and synthetic public case;
-- add documented adversarial probes per migrated task; and
-- introduce a registry and evaluation runner only when the release tiers are defined.
+- 为其他任务补齐通用 checker 库与任务组合 API；
+- 明确区分 20 个标准任务与独立案例适配器；
+- 迁移政策密集型、金融机构和勾稽类任务；
+- 为每个迁移任务建立对抗测试；
+- 在发布分层稳定后，再建立注册表和评测 runner。

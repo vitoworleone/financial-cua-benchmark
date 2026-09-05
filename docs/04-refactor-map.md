@@ -1,39 +1,36 @@
-# Source-to-target refactor map
+# 源资产到公开仓库的重构映射
 
-This is an internal migration map for the clean repository. It records adaptation decisions rather than instructing a bulk copy.
+这是迁移决策表，不是批量复制清单。每一项都先判断是否存在真实路径、实例答案、错误的发布边界或状态表述，再决定是否重构。
 
-| Source asset | Value | Main issue | Target action |
+| 源资产 | 可保留价值 | 主要问题 | 公开仓库动作 |
 | --- | --- | --- | --- |
-| `tasks/financial_20/*/task.md` | Complete task contracts | Most declare `documentation_only_not_runnable`; one case is inconsistent | Normalize metadata and publish as specifications with evidence labels |
-| `tasks/financial_20/*/SKILL.md` | Domain knowledge and task boundaries | Need terminology/style pass and cross-linking | Migrate after task catalog IDs and public release policy are stable |
-| `tasks/financial_20/*/verifier.md` | Rich verifier design, caps, adversarial states | Must be reconciled with actual implementation | Treat as canonical intent; add implementation-status block per task |
-| `financial_20_verifiers/contracts.py` | Verifier data model | Public/private data separation needs review | Refactor into public typed interfaces |
-| `financial_20_verifiers/core.py` | Shared normalization and scoring | Needs packaging, configuration, and safer defaults review | Refactor with tests before migration |
-| `financial_20_verifiers/checkers.py` | Reusable deterministic checker library | Must verify all checker contracts against docs | Migrate checker by checker with tests |
-| `financial_20_verifiers/taskbase.py` | Checker/cap composition model | Needs immutable task configuration and typing cleanup | Retain design, revise API |
-| `financial_20_verifiers/registry.py` | Task discovery/CLI | Registers 21 IDs while describing 20; injects runtime configuration | Rewrite around `standard` and `case` registries |
-| `financial_20_verifiers/tasks/fin_d*.py` | Per-task executable logic | Production modules embed `GOLDEN_FIELDS` / policy fixtures | Split rules from fixtures; migrate in priority order |
-| `selftest.py`, `adversarial.py` | C3/C4 and adversarial evidence | Depend on production-embedded golden fixtures | Rebuild as explicit synthetic test fixtures |
-| `instance_gen.py` | Workspace generation concept | May fabricate inputs from golden fields | Replace with source-driven or explicitly synthetic instance builders |
-| finance-lease case module | High-fidelity instance and ACT/360 verifier | Absolute local path, real identifier, embedded payments | Generic configurable adapter and synthetic fixture completed; original real instance remains outside this repository |
-| workspace manifests / ground truth | Instance-level execution assets | Test integrity and answer leakage | Do not migrate until release tiers are designed |
-| bond-underwriting research | Domain workflow and six task designs | Existing task cards lack final task-package / executable verifier separation | Build as Track B after Track A public contract stabilizes |
+| `tasks/financial_20/*/task.md` | 完整任务合同 | 多数仍是“只有文档，未运行”状态 | 统一元数据并按证据等级迁移 |
+| `SKILL.md` | 领域知识与任务边界 | 需要术语、风格和交叉链接审阅 | 在任务 ID 与发布策略稳定后迁移 |
+| `verifier.md` | Verifier 设计、封顶、对抗状态 | 必须与真实代码逐条核对 | 作为设计意图；加实现状态区块 |
+| 旧 `contracts.py` / `core.py` | 数据合同、归一化和评分思想 | 公开/私有分离不足 | 已重写为公开 typed interface 与可配置必要检查器 |
+| 旧 `registry.py` | 任务发现概念 | “20 个任务”与实际注册数不一致 | 后续按标准任务/案例适配器重写 |
+| 旧任务模块 | 各任务规则图 | 嵌入 `GOLDEN_FIELDS`、政策或实例数据 | 逐项拆成规则与合成测试 |
+| 旧 selftest / adversarial | 自测和对抗思路 | 依赖生产模块内 fixture | 迁移为独立合成测试 |
+| 旧实例生成器 | workspace 生成概念 | 可能由答案反推输入 | 只接受源驱动或明确合成的实例构造器 |
+| 真实租赁案例模块 | ACT/360、逐期复算与异常检测思想 | 本地路径、实际标识和付款数据写在生产代码中 | 已重构为通用配置化适配器；真实实例不迁入 |
+| workspace truth / manifest | 运行资产 | 答案泄漏和测试完整性风险 | 等发布分层设计完成后再处理 |
+| 债券承做研究 | 6 个真实工作流设计 | 尚未形成任务包/Verifier 分离 | 在财务会计公开合同稳定后建设 |
 
-## Migration order
+## 迁移顺序
 
-1. Establish package boundaries and machine-readable catalog.
-2. Refactor the shared contracts/core/checkers/task-base layer with synthetic tests.
-3. Migrate two representative standard tasks: balance sheet and cash flow. **Completed for a synthetic, adapter-contract scope**: the shared core, public task contracts, and six unit tests are now present in `verifier/` and `tasks/`.
-4. Migrate a policy-heavy task and a financial-institution task to prove abstraction quality.
-5. Rebuild the finance-lease case as a configurable adapter, not a path-bound script. **Completed for the generic ACT/360 rule and fictitious synthetic fixture; no real instance was migrated.**
-6. Migrate the remaining standard task rules, their specifications, and their synthetic development fixtures.
-7. Convert the six bond-underwriting designs into the same task-package contract.
-8. Only then establish public development and private holdout release tiers, benchmark runner, and result reporting.
+1. 建立包边界和机器可读任务总表。**已完成。**
+2. 重构共享数据合同、核心评分和测试边界。**已完成第一版。**
+3. 迁移资产负债表与现金流量表。**已完成：公开合同、规则和合成测试均已具备。**
+4. 迁移政策密集型任务与金融机构任务，以验证抽象是否足够。
+5. 将融资租赁案例改造成配置化适配器。**已完成：通用 ACT/360 规则 + 虚构三期测试；未迁移任何真实实例。**
+6. 迁移其余标准任务规则、任务说明与合成开发 fixture。
+7. 把 6 个债券承做设计转为相同的任务包合同。
+8. 再建立公开开发集、私有 holdout、runner 与结果报告。
 
-## Non-negotiable refactor rules
+## 不可妥协的重构规则
 
-- No production task-rule module may embed an instance-specific answer, local absolute path, client identifier, or input dataset.
-- Tests must be able to generate synthetic golden, initial, and adversarial cases without importing private/holdout assets.
-- The public catalog counts 20 standard tasks; case adapters are labelled separately.
-- A task document may not claim a runnable environment or Agent result without a reproducible artifact.
-- Every migrated task must retain an explicit link between documented success conditions and implemented checker IDs.
+- 生产任务规则模块不得包含实例答案、本地绝对路径、客户/项目标识或输入数据集。
+- 测试必须能用合成 golden、initial 与对抗状态运行，不依赖私有资产。
+- 公开目录固定为 20 个标准任务；案例适配器单独标注。
+- 任务文档不得把“设计完成”写成“环境可运行”或“已得到 Agent 结果”。
+- 每个已迁移任务都必须把文档中的成功条件映射到明确的 checker ID。

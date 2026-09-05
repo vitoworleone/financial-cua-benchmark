@@ -1,20 +1,20 @@
-# `fin_d2_cash_flow` verifier contract
+# `fin_d2_cash_flow` Verifier 合同
 
-Implemented by `verifier/src/finbench/tasks/cash_flow.py`.
+实现位置：`verifier/src/finbench/tasks/cash_flow.py`。
 
-| Checker ID | Deterministic condition | Weight |
+| Checker ID | 确定性条件 | 权重 |
 | --- | --- | ---: |
-| `META.IDENTITY` | task ID, entity, period, and scope match | 0.06 |
-| `META.UNIT` | unit is declared and supported | 0.04 |
-| `SECURITY.INPUT_INTEGRITY` | input hashes and security flags are clean | gate |
-| `OUTPUT.COMPLETENESS` | required output artifacts are present | 0.04 |
-| `FIELD.CRITICAL` | designated cash fields equal private truth | 0.30 |
-| `FIELD.NONCRITICAL` | remaining expected fields equal private truth | 0.28 |
-| `RULE.CF.NET_CHANGE` | net change = operating + investing + financing | 0.09 |
-| `RULE.CF.CASH_ROLLFORWARD` | closing cash = opening cash + net change | 0.07 |
-| `PROVENANCE.FIELD_MAP` | every expected field has source mapping | 0.08 |
-| `STATE.SUBMITTED` | backend state is `submitted` | 0.04 |
+| `META.IDENTITY` | 任务 ID、主体、期间、口径一致 | 0.06 |
+| `META.UNIT` | 单位已声明且受支持 | 0.04 |
+| `SECURITY.INPUT_INTEGRITY` | 输入哈希与安全标记通过 | 门禁 |
+| `OUTPUT.COMPLETENESS` | 必要输出产物齐全 | 0.04 |
+| `FIELD.CRITICAL` | 指定关键现金字段等于私有真值 | 0.30 |
+| `FIELD.NONCRITICAL` | 其他预期字段等于私有真值 | 0.28 |
+| `RULE.CF.NET_CHANGE` | 净变动 = 经营 + 投资 + 筹资 | 0.09 |
+| `RULE.CF.CASH_ROLLFORWARD` | 期末现金 = 期初现金 + 净变动 | 0.07 |
+| `PROVENANCE.FIELD_MAP` | 每个预期字段有来源映射 | 0.08 |
+| `STATE.SUBMITTED` | 后端状态为 `submitted` | 0.04 |
 
-The weighted score is capped for wrong identity (0.55), unit error (0.70), missing or wrong critical fields (0.65), either broken cash bridge (0.00), and no submission (0.40). Input modification or evaluator-state access returns zero and marks the run as a hack.
+错主体上限 0.55，错单位上限 0.70，关键字段错误上限 0.65，任一现金桥失败为 0，未提交上限 0.40。输入篡改或访问评测器状态则为 0 分并标为 `HACK`。
 
-Synthetic tests cover golden and blank states plus a broken cash bridge. The richer source design—direct/indirect-method reconciliation, foreign-exchange effects, non-cash disclosures, and restricted-cash policy—will be added only after those data contracts and checks have their own public synthetic fixtures.
+合成测试覆盖 golden、空白状态和现金桥断裂。源设计中的直接/间接法勾稽、汇率影响、非现金事项和受限资金政策，只有在拥有独立公开合成 fixture 后才会纳入。

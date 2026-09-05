@@ -1,40 +1,40 @@
-# 融资租赁 ACT/360 摊还表复核 / Finance-lease schedule review
+# 融资租赁 ACT/360 摊还表复核
 
 ```yaml
 task_id: fin_d3_finance_lease_schedule
 task_version: 0.1.0-public-refactor
 track: financial_accounting
-kind: configurable_case_adapter
-status: verifier_refactored_synthetic_tests_only
+kind: 配置化案例适配器
+status: 已重构验证器，仅含合成测试
 ```
 
-## Purpose
+## 任务目的
 
-The Agent reviews and submits an effective-interest amortization schedule for a finance lease. Unlike a fixed client case, this task is an adapter: every instance injects its own de-identified lease start date, payment dates, cash flows, annual rate, and release policy. The public verifier retains only the calculation rules.
+Agent 复核并提交一份融资租赁实际利率法摊还表。它不是绑定某个客户或项目的固定案例，而是一个适配器：每个实例自行注入脱敏起租日、付款日、现金流、年利率和发布策略，公开 Verifier 只保留计算规则。
 
-## Public task contract
+## Agent 可见任务合同
 
-The Agent receives an approved schedule source, the permitted source range, a versioned convention such as `ACT/360`, reporting metadata, a target template, and read-only source hashes. It must produce a structured schedule with each period's opening principal, actual days, cash paid, interest, principal, closing principal, totals, provenance, and submitted state.
+Agent 收到允许使用的 schedule 来源、允许来源范围、`ACT/360` 等版本化计息约定、报告元数据、目标模板和只读来源哈希。它必须产出每期的期初本金、实际天数、实收现金、利息、本金、期末本金、汇总、来源映射和提交状态。
 
-For a given period:
+对每一期：
 
 ```text
-interest = round(opening principal × annual rate × actual days / 360, 2)
-principal = cash paid − interest
-closing principal = opening principal − principal
+利息 = round(期初本金 × 年利率 × 实际天数 / 360, 2)
+本金 = 实收现金 − 利息
+期末本金 = 期初本金 − 本金
 ```
 
-The initial opening balance, each payment, and the final residual come from the instance; they are not built into the verifier.
+期初本金、每期付款和最终残值均由实例提供，不写死在 Verifier 中。
 
-## Observable requirements
+## 可观察要求
 
-- periods must be consecutively numbered and match the instance's payment-date sequence;
-- day counts must be recomputed from the start date and prior payment date;
-- each interest, principal, and closing balance must reconcile;
-- aggregate cash, interest, principal, and ending principal must reconcile to the submitted schedule and private truth;
-- each submitted schedule and total must have a provenance reference; and
-- the final backend state must be `submitted`.
+- 期次连续编号，且付款日期顺序匹配实例；
+- 由起租日和上一付款日重新计算实际天数；
+- 每期利息、还本付息拆分和本金滚动均可勾稽；
+- 现金、利息、本金和期末本金汇总同时与提交 schedule 和私有真值一致；
+- schedule 与派生汇总都有来源指针；
+- 最终后端状态为 `submitted`。
 
-## Boundary and release status
+## 发布边界
 
-The public package has a generic deterministic verifier and a fictitious three-period synthetic test. It does not include any original workbook, actual payment schedule, client identifier, or local path. It is a case adapter beside—not inside—the 20-task standard catalog, and it does not imply release of a private evaluation instance.
+公开包只含通用确定性 Verifier 和虚构三期合成测试，不含任何原始工作簿、实际付款表、客户/项目标识或本机路径。它是 20 个标准任务之外的案例适配器，不意味着任何私有评测实例已经发布。
