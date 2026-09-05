@@ -44,7 +44,7 @@ Verifier 不依赖“文件存在”或“页面显示成功”来判分，而�
 - **提交状态检查**：验证最终状态，而不是只相信文字说明；
 - **安全门禁**：识别输入篡改、越权读取与不合规写入。
 
-详见 [Verifier 架构](docs/03-verifier-architecture.md)。
+详见 [Verifier 架构](docs/03-verifier-architecture.md) 和 [校验项说明](docs/04-checker-guide.md)。
 
 ## 已实现示例
 

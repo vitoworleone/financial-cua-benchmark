@@ -1,6 +1,6 @@
 # `fin_d3_finance_lease_schedule` Verifier 合同
 
-实现位置：`verifier/src/finbench/tasks/lease_schedule.py`。版本化计息约定由 `LeasePolicy` 注入，实例真值在运行时由 `GroundTruth` 提供。
+实现位置：`verifier/src/finbench/tasks/lease_schedule.py`。版本化计息约定由 `LeasePolicy` 注入，实例真值在运行时由 `GroundTruth` 提供；每个 Checker ID 的中文含义见[校验项说明](../../docs/04-checker-guide.md)。
 
 | Checker ID | 确定性条件 | 权重 |
 | --- | --- | ---: |

@@ -1,6 +1,6 @@
 # `fin_d2_cash_flow` Verifier 合同
 
-实现位置：`verifier/src/finbench/tasks/cash_flow.py`。
+实现位置：`verifier/src/finbench/tasks/cash_flow.py`。每个 Checker ID 的中文含义见[校验项说明](../../docs/04-checker-guide.md)。
 
 | Checker ID | 确定性条件 | 权重 |
 | --- | --- | ---: |
