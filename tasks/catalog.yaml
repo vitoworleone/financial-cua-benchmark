@@ -1,0 +1,46 @@
+catalog_version: 0.1.0
+status_legend:
+  source_documented: "A reviewed source task contract exists; it has not yet been normalized into this repository."
+  verifier_refactored: "A clean, public verifier rule module and synthetic tests exist in this repository."
+  verifier_legacy_only: "A legacy executable verifier exists in the source workspace but is not a public module here."
+  design_only: "A task design exists but its task package and verifier still need to be built."
+
+tracks:
+  - id: financial_accounting
+    title: Financial accounting
+    standard_task_count: 20
+    tasks:
+      - { id: fin_d1_balance_sheet, title: 企业资产负债表填报, difficulty: D1, status: verifier_refactored }
+      - { id: fin_d1_income_statement, title: 分步式利润表填报, difficulty: D1, status: verifier_legacy_only }
+      - { id: fin_d2_bank_reconciliation, title: 银行存款余额调节, difficulty: D2, status: verifier_legacy_only }
+      - { id: fin_d2_cash_flow, title: 现金流量表填报, difficulty: D2, status: verifier_refactored }
+      - { id: fin_d2_equity_changes, title: 所有者权益变动表填报, difficulty: D2, status: verifier_legacy_only }
+      - { id: fin_d2_iit_settlement, title: 个人所得税汇算清缴, difficulty: D2, status: verifier_legacy_only }
+      - { id: fin_d2_stamp_duty_surcharges, title: 印花税及附加税费申报, difficulty: D2, status: verifier_legacy_only }
+      - { id: fin_d2_three_statements, title: 三大报表勾稽复核, difficulty: D2, status: verifier_legacy_only }
+      - { id: fin_d3_ar_aging_ecl, title: 应收账款账龄与预期信用损失, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_bank_provision, title: 银行贷款减值准备, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_cit_annual, title: 企业所得税汇算清缴, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_finance_lease, title: 融资租赁会计处理, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_fund_nav, title: 基金净值估值, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_insurance, title: 保险合同会计处理, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_lvat_liquidation, title: 土地增值税清算, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_related_party, title: 关联方交易识别与披露, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_securities, title: 证券公司自营业务会计处理, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d3_vat_filing, title: 增值税纳税申报, difficulty: D3, status: verifier_legacy_only }
+      - { id: fin_d4_consolidation_selfcheck, title: 合并报表自查, difficulty: D4, status: verifier_legacy_only }
+      - { id: fin_d4_financial_instruments, title: 金融工具分类与计量, difficulty: D4, status: verifier_legacy_only }
+    case_adapters:
+      - id: fin_d3_finance_lease_schedule
+        title: 融资租赁 ACT/360 摊还表复核
+        status: verifier_refactored
+        release_note: "A generic, configurable case adapter with synthetic tests; it replaces neither the 20 standard tasks nor any real client case."
+  - id: bond_underwriting
+    title: Bond underwriting
+    tasks:
+      - { id: bond_t1_financial_summary, title: 审计报告到财务摘要, status: design_only }
+      - { id: bond_t2_workpaper_completeness, title: 工作底稿完整性检查, status: design_only }
+      - { id: bond_t3_prospectus_consistency, title: 募集说明书与财务摘要一致性核对, status: design_only }
+      - { id: bond_t4_feedback_reply, title: 交易所反馈回复底稿, status: design_only }
+      - { id: bond_t5_abs_asset_reconciliation, title: ABS 资产合同、发票与回款勾稽, status: design_only }
+      - { id: bond_t6_market_ranking, title: 承销市场排名与文字披露, status: design_only }

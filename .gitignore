@@ -1,0 +1,20 @@
+# Python build and test output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Environment and evaluator-only material
+.env
+.venv/
+private/
+holdout/
+*.local.json
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
