@@ -4,9 +4,7 @@
 
 财务会计赛道包含 **20 个标准 Benchmark 任务**。另有一个融资租赁摊还表案例适配器，它服务于实例化 schedule 复核，不计入第 21 个通用任务。
 
-债券承做赛道现有 6 个任务设计；它们已进入公开设计目录，但尚不代表 Verifier 或运行环境已经完成。
-
-机器可读状态见 [`tasks/catalog.yaml`](../tasks/catalog.yaml)。
+债券承做赛道现有 6 个任务设计，围绕真实承做材料的提取、核验、勾稽与初稿准备展开。
 
 ## 赛道 A：财务会计 20 个标准任务
 
@@ -37,7 +35,7 @@
 
 | ID | 定位 | 当前处理方式 |
 | --- | --- | --- |
-| `fin_d3_finance_lease_schedule` | 配置化 ACT/360 租赁摊还表复核 | 已重构为通用规则适配器，配有虚构合成测试；不包含真实项目实例 |
+| `fin_d3_finance_lease_schedule` | 配置化 ACT/360 租赁摊还表复核 | 由实例化条款、现金流和计息约定驱动的通用 schedule Verifier |
 
 ## 赛道 B：债券承做工作流设计
 
@@ -49,7 +47,3 @@
 | `bond_t4_feedback_reply` | 交易所反馈回复底稿 | 回复初稿与披露清单 | 数值真值、结构、证据映射、受约束文本复核 |
 | `bond_t5_abs_asset_reconciliation` | ABS 资产合同、发票与回款勾稽 | 资产核验表与异常项 | 记录关联、计算、异常覆盖、专家复核 |
 | `bond_t6_market_ranking` | 承销市场排名与文字披露 | 排名表与市场描述 | 确定性排序/公式、来源可追溯、人工市场解释 |
-
-## 状态规则
-
-任务总表描述的是任务意图，不自动代表所有任务已经可以做模型评测。每项任务的 `spec_status`、`verifier_status`、`instance_status`、`test_status` 和 `release_tier` 以机器可读目录为准。

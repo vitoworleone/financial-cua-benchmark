@@ -2,11 +2,10 @@
 
 ```yaml
 task_id: fin_d1_balance_sheet
-task_version: 0.2.0-public-refactor
+task_version: 0.2.0
 track: financial_accounting
 difficulty: D1
-status: 已重构验证器，仅含合成测试
-environment_status: 仅定义环境适配器合同
+status: implemented
 ```
 
 ## 任务目的
@@ -46,6 +45,6 @@ Agent 将经过验证的 canonical 资产负债表填入目标网报表单，并
 
 表内平衡是必要条件，不是充分条件；两个错误字段即使恰好抵消，也必须在字段真值和来源检查中失败。
 
-## 实现边界
+## Verifier 范围
 
-当前公开 Python Verifier 检查元数据、单位、输入完整性、必交产物、关键/普通字段真值、三项公式、来源和提交状态。测试只使用合成状态对象；尚未发布浏览器 runner、私有测评集或模型排行榜。
+Python Verifier 检查元数据、单位、输入完整性、必交产物、关键/普通字段真值、三项公式、来源和提交状态。对应的 checker ID 与评分规则见 [`verifier.md`](verifier.md)。

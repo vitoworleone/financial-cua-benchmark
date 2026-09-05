@@ -2,16 +2,15 @@
 
 ```yaml
 task_id: fin_d2_cash_flow
-task_version: 0.2.0-public-refactor
+task_version: 0.2.0
 track: financial_accounting
 difficulty: D2
-status: 已重构验证器，仅含合成测试
-environment_status: 仅定义环境适配器合同
+status: implemented
 ```
 
 ## 任务目的
 
-Agent 根据 canonical 金额完成现金流量表填报，保持元数据与单位正确，产出正式提交状态，并满足核心现金滚动关系。当前公开重构聚焦可观察、可确定性验证的不变量；它不宣称已完成完整的直接法/间接法浏览器任务发布。
+Agent 根据 canonical 金额完成现金流量表填报，保持元数据与单位正确，产出正式提交状态，并满足核心现金滚动关系。
 
 ## Agent 可见任务合同
 
@@ -32,6 +31,6 @@ Agent 根据 canonical 金额完成现金流量表填报，保持元数据与单
 
 所有公式在统一单位后计算。后续完整任务会把汇率影响和直接/间接法桥接设为明确字段，不能默默塞进上述关系中。
 
-## 实现边界
+## Verifier 范围
 
-公开 Verifier 检查最终状态，不强制点击轨迹：输入完整性、元数据、单位、产物、字段真值、两条现金桥、来源与提交状态均在范围内。测试为合成测试；尚未发布 hidden set、端到端 CUA 环境或模型成绩。
+Verifier 检查最终状态，不强制点击轨迹：输入完整性、元数据、单位、产物、字段真值、两条现金桥、来源与提交状态均在范围内。对应的 checker ID 与评分规则见 [`verifier.md`](verifier.md)。

@@ -2,10 +2,10 @@
 
 ```yaml
 task_id: fin_d3_finance_lease_schedule
-task_version: 0.1.0-public-refactor
+task_version: 0.1.0
 track: financial_accounting
 kind: 配置化案例适配器
-status: 已重构验证器，仅含合成测试
+status: implemented
 ```
 
 ## 任务目的
@@ -35,6 +35,6 @@ Agent 收到允许使用的 schedule 来源、允许来源范围、`ACT/360` 等
 - schedule 与派生汇总都有来源指针；
 - 最终后端状态为 `submitted`。
 
-## 发布边界
+## Verifier 范围
 
-公开包只含通用确定性 Verifier 和虚构三期合成测试，不含任何原始工作簿、实际付款表、客户/项目标识或本机路径。它是 20 个标准任务之外的案例适配器，不意味着任何私有评测实例已经发布。
+该任务采用通用、配置化的确定性 Verifier：实例提供业务条款、付款流和计息约定，规则模块负责逐期复算与核验。它作为独立案例适配器，与 20 个标准任务并列组织。
